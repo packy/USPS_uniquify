@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+''''export PYTHONPATH=/Library/Python/2.7/site-packages # '''
 # find the latest python interpreter available
 ''''which python3 >/dev/null 2>&1 && exec python2 "$0" "$@" # '''
 ''''which python2 >/dev/null 2>&1 && exec python2 "$0" "$@" # '''
