@@ -99,6 +99,12 @@ def send_to_trash(message):
 def ts():
     return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
+
+def write_log(message):
+    print(ts() + ' ' + message)
+    sys.stdout.flush()
+
+
 def main():
     """Shows basic usage of the Gmail API.
 
@@ -106,7 +112,7 @@ def main():
     of the user's Gmail account.
     """
 
-    print(ts() + ' Started.')
+    write_log('Started.')
     results = messages().list(
         userId='me',
         q='from:auto-reply@usps.com Shipment',
@@ -116,10 +122,10 @@ def main():
     seen = {}
     shipment_number = re.compile(r"Shipment\s+(\S+)")
     if not results:
-        print(ts() + ' No USPS messages found.')
+        write_log('No USPS messages found.')
     else:
         count = results['resultSizeEstimate']
-        print(ts() + ' ' + str(count) + ' messages found; filtering')
+        write_log(str(count) + ' messages found; filtering')
         for msg in results['messages']:
             info = get_message_info(msg)
             shipment = shipment_number.search(info.subject).group(1)
@@ -127,17 +133,17 @@ def main():
                 seen[shipment] = info
             else:
                 if seen[shipment].internalDate <= info.internalDate:
-                    print(ts()+" '"+seen[shipment].subject+"' superceded by")
-                    print(ts()+"     '"+info.subject+"'")
+                    write_log("'"+seen[shipment].subject+"' superceded by")
+                    write_log("    '"+info.subject+"'")
                     send_to_trash(seen[shipment])
                     seen[shipment] = info
                 else:
-                    print(ts()+" '"+info.subject+"' superceded by")
-                    print(ts()+"     '"+seen[shipment].subject+"'")
+                    write_log("'"+info.subject+"' superceded by")
+                    write_log("    '"+seen[shipment].subject+"'")
                     send_to_trash(info)
         # for
     # if not results
-    print(ts() + ' Done.')
+    write_log('Done.')
 
 if __name__ == '__main__':
     main()
