@@ -120,7 +120,7 @@ def main():
     ).execute()
 
     seen = {}
-    shipment_number = re.compile(r"Shipment\s+(\S+)")
+    shipment_number = re.compile(r"Shipment\s+((?:[0-9]+|[0-9]+[a-zA-Z]+|[a-zA-Z]+[0-9]+)[0-9a-zA-Z]*)")
     if not results:
         write_log('No USPS messages found.')
     else:
